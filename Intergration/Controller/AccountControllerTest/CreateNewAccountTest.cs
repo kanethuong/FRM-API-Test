@@ -82,19 +82,18 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
 
         [OneTimeSetUp]
         public void setupFirst() {
-            var config = new MapperConfiguration(config => {
-                config.AddProfile(new AccountProfile());
-            });
-            mapper = config.CreateMapper();
-            mockEmailService.Setup(email => email.SendEmailAsync(It.IsAny<EmailContent>())).Returns(Task.CompletedTask);
-        }
-
-        [SetUp]
-        public void setup() {
             var option = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase("data").Options;
             dataContext = new DataContext(option);
             dataContext.Roles.AddRange(roleList);
             dataContext.SaveChanges();
+
+            var config = new MapperConfiguration(config => {
+                config.AddProfile(new AccountProfile());
+            });
+            mapper = config.CreateMapper();
+
+            mockEmailService.Setup(email => email.SendEmailAsync(It.IsAny<EmailContent>())).Returns(Task.CompletedTask);
+            
             accountService = new AccountService(
                 dataContext, 
                 mapper, 
@@ -106,6 +105,17 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
                 mockEmailService.Object
             );
             accountController = new AccountController(accountService, mapper, mockEmailService.Object);
+        }
+
+        [TearDown]
+        public void tearDown() {
+            dataContext.Administrators.RemoveRange(dataContext.Administrators);
+            dataContext.Admins.RemoveRange(dataContext.Admins);
+            dataContext.Companies.RemoveRange(dataContext.Companies);
+            dataContext.Trainees.RemoveRange(dataContext.Trainees);
+            dataContext.Trainers.RemoveRange(dataContext.Trainers);
+            dataContext.Roles.RemoveRange(dataContext.Roles);
+            dataContext.SaveChanges();
         }
 
         [Test]
