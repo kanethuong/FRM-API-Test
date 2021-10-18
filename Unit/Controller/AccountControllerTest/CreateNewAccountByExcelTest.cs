@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace kroniiapiTest.Unit.Controller.AccountControllerTest
-{
-    public class CreateNewAccountByExcelTest
+{   
+    public class CreateNewAccountByExcelTest 
     {
-
+        
     }
 }
