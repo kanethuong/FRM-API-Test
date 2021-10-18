@@ -64,7 +64,7 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
 
         [Test]
         [TestCaseSource("LoginTestCase")]
-        public async Task LogoutTestTrue(dynamic cookieOptions, int expectedStatus)
+        public void LogoutTestRun(dynamic cookieOptions, int expectedStatus)
         {
             // Arrange
 
@@ -88,7 +88,7 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
             }
 
             // Act - Try to logout
-            var response = await authController.Logout();
+            var response = authController.Logout();
             var contentResult = response as ObjectResult;
 
             // Assert
