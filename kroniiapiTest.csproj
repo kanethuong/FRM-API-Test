@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\kroniiapi\kroniiapi.csproj" />
+    <ProjectReference Include="..\kronii-api\kroniiapi.csproj" />
   </ItemGroup>
 
 </Project>
