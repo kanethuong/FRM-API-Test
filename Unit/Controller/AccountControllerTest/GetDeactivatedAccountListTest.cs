@@ -75,7 +75,7 @@ namespace kroniiapiTest.Unit.AccountControllerTest
 
         [Test]
         [TestCaseSource("DeactivatedAccListTestCase")]
-        public async Task GetDeactivatedAccountList_TrueCase(PaginationParameter paginationParameter,int stacode)
+        public async Task GetDeactivatedAccountList_ActionResult_200(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
             AccountController controller = new AccountController(mockAccount.Object, mockMapper.Object, mockEmail.Object);
@@ -127,7 +127,7 @@ namespace kroniiapiTest.Unit.AccountControllerTest
 
         [Test]
         [TestCaseSource("DeactivatedAccListTestCaseFail")]
-        public async Task GetDeactivatedAccountList_FailCase(PaginationParameter paginationParameter,int stacode)
+        public async Task GetDeactivatedAccountList_ActionResult_404(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
             AccountController controller = new AccountController(mockAccount.Object, mockMapper.Object, mockEmail.Object);
