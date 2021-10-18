@@ -18,52 +18,11 @@ namespace kroniiapiTest.Unit.Controller.AccountControllerTest
 {
     public class GetAccountListTest
     {
-        // Admin testAdmin = new Admin(){
-        //     AdminId =1,
-        //     Username="khanhtoan",
-        //     Fullname="trankhanhtoan",
-        //     Email="abc@gmail.com",
-        //     RoleId=2
-        // };
-        // Trainer testTrainer = new Trainer(){
-        //     TrainerId =1,
-        //     Username="duykhang",
-        //     Fullname="thuongduykhang",
-        //     Email="khang@gmail.com",
-        //     RoleId=3
-        // };
-        // Trainee testTrainee = new Trainee(){
-        //     TraineeId = 1,
-        //     Username="anhtho",
-        //     Fullname="tieuanhtho",
-        //     Email="tho@gmail.com",
-        //     RoleId=4
-        // };
-        // Company testCompany = new Company(){
-        //     CompanyId =1,
-        //     Username="hailong",
-        //     Fullname="lehoanghailong",
-        //     Email="long@gmail.com",
-        //     RoleId=5
-        // };
+        
         private DataContext _context;
         private readonly Mock<IAccountService> mockAccountService = new Mock<IAccountService>();
         public static readonly Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
         private readonly Mock<IMapper> mockMapper = new Mock<IMapper>();
-        // [SetUp]
-        // public void Setup()
-        // {
-        //     var option = new DbContextOptionsBuilder<DataContext>()
-        //     .UseInMemoryDatabase(databaseName: "kroniiapi").Options;
-
-        //     _context = new DataContext(option);
-
-        //     _context.Admins.AddRange(testAdmin);
-        //     _context.Trainers.AddRange(testTrainer);
-        //     _context.Trainees.AddRange(testTrainee);
-        //     _context.Companies.AddRange(testCompany);
-        //     _context.SaveChanges();
-        // }
 
         IEnumerable<AccountResponse> listAcc = new List<AccountResponse>
         {
