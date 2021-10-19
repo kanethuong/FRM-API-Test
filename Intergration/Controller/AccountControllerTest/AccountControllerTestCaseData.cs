@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using kroniiapi.Controllers;
 using kroniiapi.DB;
 using kroniiapi.DB.Models;
 using kroniiapi.Services;
@@ -22,6 +23,7 @@ namespace kroniiapitest.Intergration.Controller.AccountControllerTest
         protected ITraineeService _traineeService;
         protected ICompanyService _comapyService;
         protected IEmailService _emailService;
+        protected AccountController controller;
         List<Administrator> administratorsList = new List<Administrator>
         {
             new Administrator
@@ -230,7 +232,7 @@ namespace kroniiapitest.Intergration.Controller.AccountControllerTest
             //Add Fake DB to context, service
             _context = new DataContext(option);
             _accountService = new AccountService(_context, _mapper, _adminService,_administratorService,_comapyService, _traineeService, _trainerService, _emailService);
-
+            controller = new AccountController(_accountService, _mapper, _emailService);
             //Add fake data to Context
             _context.Administrators.AddRange(administratorsList);
             _context.Admins.AddRange(adminsList);
