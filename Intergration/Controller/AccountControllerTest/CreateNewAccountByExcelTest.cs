@@ -20,7 +20,7 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
         public async Task CreateNewAccountByExcelTestTrue()
         {
             // Arrange
-            string path = "D:\\Book1.xls";
+            string path = "not yet dude";
             var stream = File.OpenRead(path);
             IFormFile file = new FormFile(stream, 0, stream.Length, "Book1", "Book1.xls");
             // Act
