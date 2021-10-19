@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kroniiapi.DB;
 using kroniiapi.DB.Models;
+using kroniiapi.DTO.AccountDTO;
 using kroniiapi.DTO.PaginationDTO;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -13,34 +14,75 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
     public class GetAccountListTest
     {
         private DataContext _context;
-        Admin testAdmin = new Admin(){
-            AdminId =1,
-            Username="khanhtoan",
-            Fullname="trankhanhtoan",
-            Email="abc@gmail.com",
-            RoleId=2
+        Admin testAdmin = new Admin()
+        {
+            AdminId = 1,
+            Username = "khanhtoan",
+            Fullname = "trankhanhtoan",
+            Email = "abc@gmail.com",
+            RoleId = 2
         };
-        Trainer testTrainer = new Trainer(){
-            TrainerId =1,
-            Username="duykhang",
-            Fullname="thuongduykhang",
-            Email="khang@gmail.com",
-            RoleId=3
+        Trainer testTrainer = new Trainer()
+        {
+            TrainerId = 1,
+            Username = "duykhang",
+            Fullname = "thuongduykhang",
+            Email = "khang@gmail.com",
+            RoleId = 3
         };
-        Trainee testTrainee = new Trainee(){
+        Trainee testTrainee = new Trainee()
+        {
             TraineeId = 1,
-            Username="anhtho",
-            Fullname="tieuanhtho",
-            Email="tho@gmail.com",
-            RoleId=4
+            Username = "anhtho",
+            Fullname = "tieuanhtho",
+            Email = "tho@gmail.com",
+            RoleId = 4
         };
-        Company testCompany = new Company(){
-            CompanyId =1,
-            Username="hailong",
-            Fullname="lehoanghailong",
-            Email="long@gmail.com",
-            RoleId=5
+        Company testCompany = new Company()
+        {
+            CompanyId = 1,
+            Username = "hailong",
+            Fullname = "lehoanghailong",
+            Email = "long@gmail.com",
+            RoleId = 5
         };
+        IEnumerable<AccountResponse> listAcc = new List<AccountResponse>
+        {
+            new AccountResponse
+            {
+                AccountId = 1,
+                Username = "khanhtoan",
+                Fullname = "trankhanhtoan",
+                Email = "toan@gmail.com",
+                Role = "admin"
+            },
+
+            new AccountResponse
+            {
+                AccountId = 1,
+                Username = "duykhang",
+                Fullname = "thuongduykhang",
+                Email = "khang@gmail.com",
+                Role = "Trainer"
+            },
+            new AccountResponse
+            {
+                AccountId = 1,
+                Username = "anhtho",
+                Fullname = "tieuanhtho",
+                Email = "tho@gmail.com",
+                Role = "Trainee"
+            },
+            new AccountResponse
+            {
+                AccountId = 1,
+                Username = "hailong",
+                Fullname = "lehoanghailong",
+                Email = "long@gmail.com",
+                Role = "Company"
+            }
+        };
+
         [SetUp]
         public void Setup()
         {
@@ -64,8 +106,8 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
                     new PaginationParameter
                     {
                         PageNumber = 1,
-                        PageSize = 1,
-                        SearchName = "hostcode0301"
+                        PageSize = 4,
+                        SearchName = ""
                     },
                     200
                 );
@@ -73,7 +115,8 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
                 yield return new TestCaseData(
                     new PaginationParameter
                     {
-                        SearchName = "hostcode0301"
+                        
+                        SearchName = "toan@gmail.com"
                     },
                     200
                 );
