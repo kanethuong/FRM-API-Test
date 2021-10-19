@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using kroniiapi.Controllers;
@@ -88,18 +89,41 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
             dataContext.SaveChanges();
         }
         
+        public static IEnumerable<TestCaseData> CreateNewAccountByExcelTestCaseTrue
+        {
+            get {
+                yield return new TestCaseData(
+                    "\\FileForTest\\CreateAccTestTrue.xlsx",
+                    201
+                );
+                yield return new TestCaseData(
+                    "\\FileForTest\\CreateAccWrongExtension.docx",
+                    400
+                );
+                yield return new TestCaseData(
+                    "\\FileForTest\\CreateAccTestFakeExtension.xlsx",
+                    400
+                );
+            }
+        }
+
         [Test]
-        public async Task CreateNewAccountByExcelTestTrue()
+        [TestCaseSource("CreateNewAccountByExcelTestCaseTrue")]
+        public async Task CreateNewAccountByExcelTestTrue(string pathTest, int expectedStatus)
         {
             // Arrange
-            string path = "D:\\CreateAccTestTrue.xlsx";
-            var stream = File.OpenRead(path);
+            //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"CreateAccTestTrue.xlsx");
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+            string pathToTest = projectDirectory + pathTest;
+
+            var stream = File.OpenRead(pathToTest);
             IFormFile file = new FormFile(stream, 0, stream.Length, "CreateAccTestTrue", "CreateAccTestTrue.xls");
             // Act
             var rs = await accountController.CreateNewAccountByExcel(file);
             var obResult = rs.Result as ObjectResult;
             // Assert
-            Assert.AreEqual(201, obResult.StatusCode);
+            Assert.AreEqual(expectedStatus, obResult.StatusCode);
         }
 
 
