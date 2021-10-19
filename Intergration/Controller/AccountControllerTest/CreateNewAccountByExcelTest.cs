@@ -15,9 +15,6 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
 {
     [TestFixture]
     public class CreateNewAccountByExcelTest : AccountControllerTestCaseData
-    {
-        [Test]
-        public async Task CreateNewAccountByExcelTestTrue()
         {
             // Arrange
             string path = "D:\\Book1.xls";
@@ -29,6 +26,8 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
             // Assert
             Assert.AreEqual(400, obResult.StatusCode);
         }
+
+
 
 
     }
