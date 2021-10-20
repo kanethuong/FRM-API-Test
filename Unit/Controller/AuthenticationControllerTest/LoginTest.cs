@@ -7,6 +7,6 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
 {
     public class LoginTest
     {
-
+        
     }
 }
