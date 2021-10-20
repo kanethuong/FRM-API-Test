@@ -22,7 +22,7 @@ namespace kroniiapiTest.Unit.Controller.AccountControllerTest
         [Test]
         public async Task DeactivateAccount_ReturnActionResult_Return200()
         {
-            //Calling Controller using 2 mock Object
+            //Calling Controller using 3 mock Object
             AccountController controller 
                 = new AccountController(mockAccountService.Object,mockMapper.Object,mockEmailService.Object);
 
@@ -40,19 +40,37 @@ namespace kroniiapiTest.Unit.Controller.AccountControllerTest
         [Test]
         public async Task DeactivateAccount_ReturnActionResult_Return404()
         {
-            //Calling Controller using 2 mock Object
+            //Calling Controller using 3 mock Object
             AccountController controller 
                 = new AccountController(mockAccountService.Object,mockMapper.Object,mockEmailService.Object);
 
             // Setup Services return using Mock
-            mockAccountService.Setup(x => x.DeactivateAccount(1,"Trainee")).ReturnsAsync(0);
+            mockAccountService.Setup(x => x.DeactivateAccount(1,"Trainee")).ReturnsAsync(-1);
 
             // Get Controller return result
             var actual = await controller.DeactivateAccount(1,"Trainee");
             var okResult = actual as ObjectResult;
             
             // Assert result with expected result: this time is 404
-            Assert.AreEqual(500, okResult.StatusCode);
+            Assert.AreEqual(404, okResult.StatusCode);
+        }
+
+        [Test]
+        public async Task DeactivateAccount_ReturnActionResult_Return409()
+        {
+            //Calling Controller using 3 mock Object
+            AccountController controller 
+                = new AccountController(mockAccountService.Object,mockMapper.Object,mockEmailService.Object);
+
+            // Setup Services return using Mock
+            mockAccountService.Setup(x => x.DeactivateAccount(1,"Administrator")).ReturnsAsync(0);
+
+            // Get Controller return result
+            var actual = await controller.DeactivateAccount(1,"Administrator");
+            var okResult = actual as ObjectResult;
+            
+            // Assert result with expected result: this time is 409
+            Assert.AreEqual(409, okResult.StatusCode);
         }
     }
 }
