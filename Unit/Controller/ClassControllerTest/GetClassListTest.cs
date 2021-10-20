@@ -18,15 +18,12 @@ namespace kroniiapiTest.Unit.ClassControllerTest
     public class GetClassListTest
     {
         private readonly Mock<IClassService> mockClass = new Mock<IClassService>();
-<<<<<<< HEAD
         private readonly Mock<ITraineeService> mockTrainee= new Mock<ITraineeService>();
         private readonly Mock<IAdminService> mockAdmin= new Mock<IAdminService>();
         private readonly Mock<IFeedbackService> mockFeedback= new Mock<IFeedbackService>();
         private readonly Mock<ITrainerService> mockTrainer= new Mock<ITrainerService>();
         private readonly Mock<IMarkService> mockMark= new Mock<IMarkService>();
         private readonly Mock<IModuleService> mockModule= new Mock<IModuleService>();
-=======
->>>>>>> ee7e456f14770a137e39afa2ad3c09c85027a04b
         private readonly Mock<IMapper> mockMapper = new Mock<IMapper>();
 
         public static IEnumerable<TestCaseData> GetClassListTestCaseTrue
@@ -102,11 +99,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         public async Task GetClassList_ActionResult_200(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
-<<<<<<< HEAD
             ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
-=======
-            ClassController controller = new ClassController(mockClass.Object, mockMapper.Object);
->>>>>>> ee7e456f14770a137e39afa2ad3c09c85027a04b
 
             // Setup Services return using Mock
             mockClass.Setup(x => x.GetClassList(paginationParameter)).ReturnsAsync(Tuple.Create(2,listClassService));
@@ -119,7 +112,6 @@ namespace kroniiapiTest.Unit.ClassControllerTest
             Assert.AreEqual(stacode, okResult.StatusCode);
         }
 
-<<<<<<< HEAD
         public static IEnumerable<TestCaseData> GetClassListTestCaseFail
         {
             get
@@ -177,8 +169,6 @@ namespace kroniiapiTest.Unit.ClassControllerTest
             Assert.AreEqual(stacode, okResult.StatusCode);
         }
 
-=======
->>>>>>> ee7e456f14770a137e39afa2ad3c09c85027a04b
 
     }
 }
