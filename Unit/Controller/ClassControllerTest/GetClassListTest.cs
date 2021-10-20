@@ -19,8 +19,11 @@ namespace kroniiapiTest.Unit.ClassControllerTest
     {
         private readonly Mock<IClassService> mockClass = new Mock<IClassService>();
         private readonly Mock<ITraineeService> mockTrainee= new Mock<ITraineeService>();
-        private readonly Mock<ITrainerService> mockTrainer= new Mock<ITrainerService>();
         private readonly Mock<IAdminService> mockAdmin= new Mock<IAdminService>();
+        private readonly Mock<IFeedbackService> mockFeedback= new Mock<IFeedbackService>();
+        private readonly Mock<ITrainerService> mockTrainer= new Mock<ITrainerService>();
+        private readonly Mock<IMarkService> mockMark= new Mock<IMarkService>();
+        private readonly Mock<IModuleService> mockModule= new Mock<IModuleService>();
         private readonly Mock<IMapper> mockMapper = new Mock<IMapper>();
 
         public static IEnumerable<TestCaseData> GetClassListTestCaseTrue
@@ -42,14 +45,6 @@ namespace kroniiapiTest.Unit.ClassControllerTest
                     new PaginationParameter
                     {
                         SearchName = "hostcode0301"
-                    },
-                    200
-                );
-                // True case: with SearchName
-                yield return new TestCaseData(
-                    new PaginationParameter
-                    {
-                        SearchName = "hentaiz.net"
                     },
                     200
                 );
@@ -96,10 +91,67 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         public async Task GetClassList_ActionResult_200(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
-            ClassController controller = new ClassController(mockClass.Object,mockTrainer.Object,mockAdmin.Object,mockTrainee.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
 
             // Setup Services return using Mock
             mockClass.Setup(x => x.GetClassList(paginationParameter)).ReturnsAsync(Tuple.Create(2,listClassService));
+
+            // Get Controller return result
+            var actual = await controller.GetClassList(paginationParameter);
+            var okResult = actual.Result as ObjectResult;
+            
+            // Assert result with expected result: this time is 404
+            Assert.AreEqual(stacode, okResult.StatusCode);
+        }
+
+        public static IEnumerable<TestCaseData> GetClassListTestCaseFail
+        {
+            get
+            {
+                // Fail case: with no PageNumber, PageSize and SearchName
+                yield return new TestCaseData(
+                    new PaginationParameter
+                    {
+
+                    },
+                    404
+                );
+        
+                // Fail case: with oversizing
+                yield return new TestCaseData(
+                    new PaginationParameter
+                    {
+                        PageNumber = 10,
+                        PageSize = 100
+                    },
+                    404
+                );
+            }
+        }
+
+        IEnumerable<Class> listClassServicefail = new List<Class>
+        {
+            new Class
+            {
+
+
+            },
+
+            new Class
+            {
+                
+            }
+        };
+
+        [Test]
+        [TestCaseSource("GetClassListTestCaseFail")]
+        public async Task GetClassList_ActionResult_404(PaginationParameter paginationParameter,int stacode)
+        {
+            //Calling Controller using 2 mock Object
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+
+            // Setup Services return using Mock
+            mockClass.Setup(x => x.GetClassList(paginationParameter)).ReturnsAsync(Tuple.Create(0,listClassServicefail));
 
             // Get Controller return result
             var actual = await controller.GetClassList(paginationParameter);
