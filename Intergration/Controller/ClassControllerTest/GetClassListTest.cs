@@ -132,7 +132,9 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
                 dataContext
             );
             classService = new ClassService(
-                dataContext
+                dataContext,
+                mapper,
+                new TraineeService(dataContext)
             );
             classController = new ClassController(classService,traineeService,markService,adminService,moduleService, trainerService,feedbackService, mapper);
         }
