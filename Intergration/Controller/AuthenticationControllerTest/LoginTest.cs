@@ -15,6 +15,8 @@ using kroniiapi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
 
@@ -146,28 +148,98 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
             dataContext.Roles.RemoveRange(dataContext.Roles);
             dataContext.SaveChanges();
         }
+        public static IEnumerable<TestCaseData> LoginTestCaseFail
+        {
+            get {
+                //Fail case: Null Login Input
+                yield return new TestCaseData(
+                    new LoginInput {
+                        Email = "",
+                        Password = ""
+                    },
+                    new {
+                        localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
+                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                        },
+                    "$2a$12$v.Hdp7QJKFozspX2LS1kmOzRsdkCdnAO3vYtod32eqhiwrunNPWiu",
+                    404
+                );
+                //Fail case: Wrong password bcrypted 
+                yield return new TestCaseData(
+                    new LoginInput
+                    {
+                        Email = "danhlpt@gmail.com",
+                        Password = "admin"
+                    },
+                    new {
+                        localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
+                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                        },
+                    "bcryptSai",
+                    404
+
+                );         
+            }
+        }
+
+        [Test]
+        [TestCaseSource("LoginTestCaseFail")]
+        public async Task LoginTest_ActionResult_Fail_404(LoginInput loginInput,dynamic cookieOptions,string passBcrypt ,int staCode)
+        {
+            string localCookie, serverCookie, serverMail;
+            try { localCookie = (string)cookieOptions.localCookie; } catch { localCookie = null; }
+            try { serverCookie = (string)cookieOptions.serverCookie; } catch { serverCookie = null; }
+            try { serverMail = (string)cookieOptions.email; } catch { serverMail = null; }
+
+            var cookie = new StringValues((localCookie == null) ? "" : "X-Refresh-Token" + "=" + localCookie);
+            authenticationController.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+            authenticationController.ControllerContext.HttpContext.Request.Headers.Add(HeaderNames.Cookie, cookie);
+            
+            
+            var rs = await authenticationController.Login(loginInput);
+            var obResult = rs.Result as ObjectResult;
+
+            Assert.AreEqual(staCode, obResult.StatusCode);
+        }
+
+
         public static IEnumerable<TestCaseData> LoginTestCaseTrue
         {
             get {
                 yield return new TestCaseData(
                     new LoginInput {
-                        Email = "iamironman@gmail.com",
-                        Password = "iamironman"
-                    }
+                        Email = "lephamthanhdanh@gmail.com",
+                        Password = "admin"
+                    },
+                    new {
+                        localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
+                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                        },
+                    "$2a$12$v.Hdp7QJKFozspX2LS1kmOzRsdkCdnAO3vYtod32eqhiwrunNPWiu",
+                    404
                 );
             }
         }
 
         [Test]
         [TestCaseSource("LoginTestCaseTrue")]
-        public async Task LoginTest_ActionResult_200OK(LoginInput loginInput)
+        public async Task LoginTest_ActionResult_True_200(LoginInput loginInput,dynamic cookieOptions,string passBcrypt ,int staCode)
         {
+            string localCookie, serverCookie, serverMail;
+            try { localCookie = (string)cookieOptions.localCookie; } catch { localCookie = null; }
+            try { serverCookie = (string)cookieOptions.serverCookie; } catch { serverCookie = null; }
+            try { serverMail = (string)cookieOptions.email; } catch { serverMail = null; }
+
+            var cookie = new StringValues((localCookie == null) ? "" : "X-Refresh-Token" + "=" + localCookie);
+            authenticationController.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+            authenticationController.ControllerContext.HttpContext.Request.Headers.Add(HeaderNames.Cookie, cookie);
+            
+            
             var rs = await authenticationController.Login(loginInput);
             var obResult = rs.Result as ObjectResult;
 
-            Assert.AreEqual(404, obResult.StatusCode);
+            Assert.AreEqual(staCode, obResult.StatusCode);
         }
-
 
     }
 }
