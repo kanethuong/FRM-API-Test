@@ -138,7 +138,7 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             );
             classController = new ClassController(classService,traineeService,markService,adminService,moduleService, trainerService,feedbackService, mapper);
         }
-
+        
         [OneTimeTearDown]
         public void tearDown() {
             dataContext.Classes.AddRange(classList);
