@@ -18,6 +18,9 @@ namespace kroniiapiTest.Unit.ClassControllerTest
     public class GetClassListTest
     {
         private readonly Mock<IClassService> mockClass = new Mock<IClassService>();
+        private readonly Mock<ITraineeService> mockTrainee= new Mock<ITraineeService>();
+        private readonly Mock<ITrainerService> mockTrainer= new Mock<ITrainerService>();
+        private readonly Mock<IAdminService> mockAdmin= new Mock<IAdminService>();
         private readonly Mock<IMapper> mockMapper = new Mock<IMapper>();
 
         public static IEnumerable<TestCaseData> GetClassListTestCaseTrue
@@ -93,7 +96,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         public async Task GetClassList_ActionResult_200(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
-            ClassController controller = new ClassController(mockClass.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainer.Object,mockAdmin.Object,mockTrainee.Object, mockMapper.Object);
 
             // Setup Services return using Mock
             mockClass.Setup(x => x.GetClassList(paginationParameter)).ReturnsAsync(Tuple.Create(2,listClassService));
