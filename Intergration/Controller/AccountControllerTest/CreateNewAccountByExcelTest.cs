@@ -97,6 +97,10 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
                     201
                 );
                 yield return new TestCaseData(
+                    "\\FileForTest\\Book1.xls",
+                    400
+                );
+                yield return new TestCaseData(
                     "\\FileForTest\\CreateAccWrongExtension.docx",
                     400
                 );
@@ -112,11 +116,10 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
         public async Task CreateNewAccountByExcelTestTrue(string pathTest, int expectedStatus)
         {
             // Arrange
-            //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"CreateAccTestTrue.xlsx");
+            
             string workingDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
             string pathToTest = projectDirectory + pathTest;
-
             var stream = File.OpenRead(pathToTest);
             IFormFile file = new FormFile(stream, 0, stream.Length, "CreateAccTestTrue", "CreateAccTestTrue.xls");
             // Act
