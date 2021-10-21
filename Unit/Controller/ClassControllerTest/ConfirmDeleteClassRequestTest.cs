@@ -57,7 +57,7 @@ namespace kroniiapiTest.Unit.Controller.ClassControllerTest
             mockClass.Setup(cl => cl.UpdateDeletedClass(cfDelClassInput)).ReturnsAsync(0);
             var result = await classController.ConfirmDeleteClassRequest(cfDelClassInput) as ObjectResult;
             var rs = result.Value as ResponseDTO;
-            var expectedStatus = 400;
+            var expectedStatus = 409;
             Assert.True(
                 result.StatusCode == expectedStatus && rs.Status == expectedStatus, "Wrong status code"
             );

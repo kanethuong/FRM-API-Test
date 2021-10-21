@@ -80,8 +80,10 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             DeactivatedAt = null,
             RoleId = 3
         };
-        private readonly Class clazz = new Class()
+        private readonly List<Class> classes = new List<Class>()
         {
+            new Class()
+            {
                 ClassId = 1,
                 ClassName = "Phuttt",
                 Description = "Tran Thien Phu",
@@ -92,6 +94,20 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
                 AdminId = 1,
                 TrainerId = 1,
                 RoomId = 1,
+            },
+            new Class()
+            {
+                ClassId = 2,
+                ClassName = "SE1501",
+                Description = "Programming",
+                CreatedAt = new DateTime(2021,10,18),
+                StartDay = new DateTime(2021,10,18),
+                EndDay = new DateTime(2024,10,18),
+                IsDeactivated = false,
+                AdminId = 1,
+                TrainerId = 1,
+                RoomId = 1,
+            }
         };
         private readonly Room room = new Room
         {
@@ -99,9 +115,9 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             RoomName = "se1501"
         };
 
-        private readonly ConfirmDeleteClassInput confirmDeleteClassInput = new ConfirmDeleteClassInput()
+        private readonly ConfirmDeleteClassInput confirmDeleteClassInput_Success = new ConfirmDeleteClassInput()
         {
-            ClassId = 1,
+            ClassId = 2,
             DeleteClassRequestId = 1,
             IsDeactivate = true
         };
@@ -120,10 +136,10 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             IsDeactivate = true
         };
 
-        private readonly DeleteClassRequest deleteClassRequest = new DeleteClassRequest(){
+        private readonly DeleteClassRequest deleteClassRequest_Success = new DeleteClassRequest(){
             DeleteClassRequestId = 1,
             Reason = "phong hu",
-            ClassId = 1,
+            ClassId = 2,
             IsAccepted = false,
             AdminId = 1
         };
@@ -152,14 +168,14 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             dataContext.Admins.AddRange(admin);
             dataContext.Trainers.AddRange(trainer);
             dataContext.Rooms.AddRange(room);
-            dataContext.Classes.AddRange(clazz);
+            dataContext.Classes.AddRange(classes);
             dataContext.SaveChanges();
             classService = new ClassService(dataContext,mapper,traineeService);
             classController = new ClassController(classService, null, null, null, null, null, null, null);
 
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown(){
             dataContext.DeleteClassRequests.RemoveRange(dataContext.DeleteClassRequests);
             dataContext.Classes.RemoveRange(dataContext.Classes);
@@ -170,9 +186,9 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
         }
         [Test]
         public async Task ConfirmDeleteClassReq_Success(){
-                dataContext.DeleteClassRequests.Add(deleteClassRequest);
+                dataContext.DeleteClassRequests.Add(deleteClassRequest_Success);
                 dataContext.SaveChanges();
-                var result = await classController.ConfirmDeleteClassRequest(confirmDeleteClassInput) as ObjectResult;
+                var result = await classController.ConfirmDeleteClassRequest(confirmDeleteClassInput_Success) as ObjectResult;
                 var rs = result.Value as ResponseDTO;   
                 Assert.True(
                 result.StatusCode == 200 && rs.Status == 200, "Wrong status code"
@@ -197,7 +213,7 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
                 var result = await classController.ConfirmDeleteClassRequest(confirmDeleteClassInput_Conflict) as ObjectResult;
                 var rs = result.Value as ResponseDTO;
                 Assert.True(
-                result.StatusCode == 400 && rs.Status == 400, "Wrong status code"
+                result.StatusCode == 409 && rs.Status == 409, "Wrong status code"
             );
         }
 
