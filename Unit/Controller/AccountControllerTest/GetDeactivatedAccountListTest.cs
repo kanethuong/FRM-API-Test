@@ -42,14 +42,6 @@ namespace kroniiapiTest.Unit.AccountControllerTest
                     },
                     200
                 );
-                // True case: with SearchName
-                yield return new TestCaseData(
-                    new PaginationParameter
-                    {
-                        SearchName = "hentaiz.net"
-                    },
-                    200
-                );
             }
         }
         IEnumerable<AccountResponse> listAcc = new List<AccountResponse>
@@ -95,7 +87,7 @@ namespace kroniiapiTest.Unit.AccountControllerTest
         {
             get
             {
-                // True case: with PageNumber, PageSize and SearchName
+                // Fail case: with No PageNumber, PageSize and SearchName
                 yield return new TestCaseData(
                     new PaginationParameter
                     {
@@ -104,6 +96,7 @@ namespace kroniiapiTest.Unit.AccountControllerTest
                     404
 
                 );
+                //Fail case: Out of range
                 yield return new TestCaseData(
                     new PaginationParameter
                     {

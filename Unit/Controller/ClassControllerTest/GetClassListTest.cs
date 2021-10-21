@@ -48,14 +48,6 @@ namespace kroniiapiTest.Unit.ClassControllerTest
                     },
                     200
                 );
-                // True case: with SearchName
-                yield return new TestCaseData(
-                    new PaginationParameter
-                    {
-                        SearchName = "hentaiz.net"
-                    },
-                    200
-                );
             }
         }
         IEnumerable<Class> listClassService = new List<Class>
@@ -116,7 +108,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         {
             get
             {
-                // True fail: with no PageNumber, PageSize and SearchName
+                // Fail case: with no PageNumber, PageSize and SearchName
                 yield return new TestCaseData(
                     new PaginationParameter
                     {
@@ -125,7 +117,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
                     404
                 );
         
-                // True fail: with oversizing
+                // Fail case: with oversizing
                 yield return new TestCaseData(
                     new PaginationParameter
                     {

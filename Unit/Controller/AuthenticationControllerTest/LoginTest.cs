@@ -29,7 +29,7 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
         {
             get
             {
-                
+                //True case
                 yield return new TestCaseData(
                     new LoginInput
                     {
@@ -43,21 +43,22 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
                     "$2a$12$v.Hdp7QJKFozspX2LS1kmOzRsdkCdnAO3vYtod32eqhiwrunNPWiu",
                     200
 
-                );          
-                yield return new TestCaseData(
-                    new LoginInput
-                    {
-                        Email = "lephamthanhdanh@gmail.com",
-                        Password = "abcxyz123@"
-                    },
-                    new {
-                        localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
-                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
-                        },
-                    "$2a$12$1CTsXUySliIfM3vYf9m0W.ZQJarX11YKcntw5hjNpn.O1x5DcEDCi",
-                    200
+                );   
+                //True case       
+                // yield return new TestCaseData(
+                //     new LoginInput
+                //     {
+                //         Email = "lephamthanhdanh@gmail.com",
+                //         Password = "abcxyz123@"
+                //     },
+                //     new {
+                //         localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
+                //         serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                //         },
+                //     "$2a$12$1CTsXUySliIfM3vYf9m0W.ZQJarX11YKcntw5hjNpn.O1x5DcEDCi",
+                //     200
 
-                );                
+                // );                
                 
             }
         }
@@ -122,7 +123,7 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
         {
             get
             {
-                
+                // Fail case: wrong email format
                 yield return new TestCaseData(
                     new LoginInput
                     {
@@ -137,6 +138,7 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
                     404
 
                 );          
+                //Fail case: Null login input
                 yield return new TestCaseData(
                     new LoginInput
                     {
@@ -150,8 +152,35 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
                     "$2a$12$1CTsXUySliIfM3vYf9m0W.ZQJarX11YKcntw5hjNpn.O1x5DcEDCi",
                     404
 
-                );                
-                
+                );    
+                // Fail case: No cookie            
+                yield return new TestCaseData(
+                    new LoginInput
+                    {
+                        Email = "danhlpt@gmail.com",
+                        Password = "admin"
+                    },
+                    new {
+                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                        },
+                    "$2a$12$1CTsXUySliIfM3vYf9m0W.ZQJarX11YKcntw5hjNpn.O1x5DcEDCi",
+                    404
+                );        
+                //Fail case: Wrong password bcrypted 
+                yield return new TestCaseData(
+                    new LoginInput
+                    {
+                        Email = "danhlpt@gmail.com",
+                        Password = "admin"
+                    },
+                    new {
+                        localCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200",
+                        serverCookie = "ab2bd817-98cd-4cf3-a80a-53ea0cd9c200"
+                        },
+                    "bcryptSai",
+                    404
+
+                );         
             }
         }
         [Test]
@@ -169,9 +198,6 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
 
             
 
-            //Calling Controller using 2 mock Object
-            
-            // Setup Services return using Mock
             mockAccountService.Setup(x => x.GetAccountByEmail(logInput.Email)).ReturnsAsync(Tuple.Create(accTrue,passBcrypt));
             mockJwtGenerator.Setup(x => x.GenerateAccessToken(It.IsAny<IEnumerable<Claim>>())).Returns("ThinhChoDien");
             mockRefreshToken.Setup(x => x.CreateRefreshToken(accTrue.Email)).Returns("ThinhDeoDepTrai");
@@ -186,7 +212,6 @@ namespace kroniiapiTest.Unit.Controller.AuthenticationControllerTest
             var actual = await controller.Login(logInput);
             var okResult = actual.Result as ObjectResult;
             
-            // Assert result with expected result: this time is 404
             Assert.AreEqual(stacode, okResult.StatusCode);
         }
 
