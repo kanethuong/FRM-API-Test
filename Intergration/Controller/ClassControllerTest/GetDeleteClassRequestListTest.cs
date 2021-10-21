@@ -192,10 +192,12 @@ namespace kroniiapiTest.Intergration.Controller.ClassControllerTest
             mapper = config.CreateMapper();
 
             trainerService = new TrainerService(
-                dataContext
+                dataContext,
+                classService
             );
             adminService = new AdminService(
-                dataContext
+                dataContext,
+                classService
             );
             classService = new ClassService(
                 dataContext,
