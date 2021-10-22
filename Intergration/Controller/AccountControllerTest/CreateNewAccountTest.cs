@@ -23,6 +23,7 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
         private Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
         private DataContext dataContext;
         private IMapper mapper;
+        private IClassService classService;
         private AccountService accountService;
         private AccountController accountController;
         private readonly List<Role> roleList = new List<Role>() {
@@ -97,11 +98,11 @@ namespace kroniiapiTest.Intergration.Controller.AccountControllerTest
             accountService = new AccountService(
                 dataContext, 
                 mapper, 
-                new AdminService(dataContext),
+                new AdminService(dataContext,classService),
                 new AdministratorService(dataContext),
                 new CompanyService(dataContext),
                 new TraineeService(dataContext),
-                new TrainerService(dataContext),
+                new TrainerService(dataContext,classService),
                 mockEmailService.Object
             );
             accountController = new AccountController(accountService, mapper, mockEmailService.Object);

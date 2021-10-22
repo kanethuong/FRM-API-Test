@@ -72,25 +72,6 @@ namespace kroniiapiTest.Unit.Controller.AccountControllerTest
         }
 
         [Test]
-        public async Task ForgotPassword_Success()
-        {
-            // Arrange
-            EmailInput emailInput=new EmailInput();
-            AccountController controller=new AccountController(mockAccountService.Object,mockMapper.Object,mockEmailService.Object);
-            mockAccountService.Setup(acc => acc.UpdateAccountPassword(emailInput.Email,It.IsAny<string>())).ReturnsAsync(1);
-
-            // Act
-            var rs=await controller.ForgotPassword(emailInput) as ObjectResult;
-            var response=rs.Value as ResponseDTO;
-
-            // Assert
-            Assert.True(
-                200==rs.StatusCode &&
-                200==response.Status
-            );
-        }
-
-        [Test]
         public async Task ForgotPassword_Fail()
         {
             // Arrange
