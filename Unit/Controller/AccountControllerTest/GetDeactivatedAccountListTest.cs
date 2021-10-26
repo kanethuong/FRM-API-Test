@@ -44,24 +44,28 @@ namespace kroniiapiTest.Unit.AccountControllerTest
                 );
             }
         }
-        IEnumerable<AccountResponse> listAcc = new List<AccountResponse>
+        IEnumerable<DeletedAccountResponse> listAcc = new List<DeletedAccountResponse>
         {
-            new AccountResponse
+            new DeletedAccountResponse
             {
-                AccountId = 1,
                 Username = "Phuttt",
-                Fullname = "Tran Thien Phu",
-                Email = "hostcode0301@gmail.com",
-                Role = "admin"
+                Role = "admin",
+                DeactivatedAt = new DateTime(2021,10,25),
+                DeleteBy = new DeleteBy{
+                    Fullname = "Le Pham Thanh Danh",
+                    AvatarURL = "abc"
+                }
             },
 
-            new AccountResponse
+            new DeletedAccountResponse
             {
-                AccountId = 2,
                 Username = "Fuck",
-                Fullname = "Thinh Cho Dien",
-                Email = "thinhnp@gmail.com",
-                Role = "trainee"
+                Role = "trainee",
+                DeactivatedAt = new DateTime(2021,10,25),
+                DeleteBy = new DeleteBy{
+                    Fullname = "Le Pham Thanh Danh",
+                    AvatarURL = "abc"
+                }
             }
         };
 
@@ -110,9 +114,9 @@ namespace kroniiapiTest.Unit.AccountControllerTest
             }
         }
 
-        IEnumerable<AccountResponse> listAccfail = new List<AccountResponse>
+        IEnumerable<DeletedAccountResponse> listAccfail = new List<DeletedAccountResponse>
         {
-            new AccountResponse
+            new DeletedAccountResponse
             {
 
             }
