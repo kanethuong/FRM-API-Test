@@ -146,7 +146,7 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
         [OneTimeTearDown]
         public void tearDown()
         {
-            dataContext.Classes.AddRange(classList);
+            dataContext.Classes.RemoveRange(classList);
             dataContext.Admins.RemoveRange(dataContext.Admins);
             dataContext.Trainees.RemoveRange(dataContext.Trainees);
             dataContext.Trainers.RemoveRange(dataContext.Trainers);
@@ -172,7 +172,7 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
                 yield return new TestCaseData(
                    new PaginationParameter
                    {
-                       SearchName = "abcd"
+                       SearchName = "abcxyz"
                    },
                    200
                );
