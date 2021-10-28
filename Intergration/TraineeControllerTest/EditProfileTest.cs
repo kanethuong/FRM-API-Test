@@ -102,7 +102,7 @@ namespace kroniiapitest.Intergration.TraineeControllerTest
                     Fullname = "Huynh Tien",
                     Email = "huynhqtien@gmail.com",
                     Phone = "0999999999",
-                    DOB = DateTime.Now,
+                    DOB = DateTime.MinValue,
                     Address = "Can Tho",
                     Gender = "Male",
                     TuitionFee = 0,
@@ -130,12 +130,19 @@ namespace kroniiapitest.Intergration.TraineeControllerTest
         {
             get
             {
-                yield return new TestCaseData(1, new TraineeProfileDetailInput(), 409);
+                yield return new TestCaseData(1, new TraineeProfileDetailInput()
+                {
+                    Fullname = "Huynh Tien",
+                    Phone = "0999999999",
+                    DOB = DateTime.MinValue,
+                    Address = "Can Tho",
+                    Gender = "Male",
+                }, 409);
                 yield return new TestCaseData(1, new TraineeProfileDetailInput()
                 {
                     Fullname = "Huynh Quang Tien",
                     Phone = "0111111111",
-                    DOB = DateTime.MinValue,
+                    DOB = DateTime.MaxValue,
                     Address = "An Giang",
                     Gender = "Female"
                 }, 200);
