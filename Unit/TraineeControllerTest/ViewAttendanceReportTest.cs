@@ -197,7 +197,7 @@ namespace kroniiapiTest.Unit.TraineeControllerTest
             // Get Controller return result
             var actual = await controller.ViewAttendanceReport(trainee.TraineeId, paginationParameter);
             var okResult = actual.Result as ObjectResult;
-            // Assert result with expected result: this time is 200
+            // Assert result with expected result: this time is 400
             Assert.AreEqual(stacode, okResult.StatusCode);
         }
 
