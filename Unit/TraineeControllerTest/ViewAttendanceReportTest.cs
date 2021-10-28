@@ -146,7 +146,7 @@ namespace kroniiapiTest.Unit.TraineeControllerTest
                         PageNumber = 1,
                         PageSize = 1,
                     },
-                    400
+                    404
                 );
                 // Fail case: Trainee not found
                 yield return new TestCaseData(
@@ -157,7 +157,7 @@ namespace kroniiapiTest.Unit.TraineeControllerTest
                     {
 
                     },
-                    400
+                    404
                 );
             }
         }
@@ -175,7 +175,7 @@ namespace kroniiapiTest.Unit.TraineeControllerTest
 
         [Test]
         [TestCaseSource("GetAttendanceReportTestCaseFail")]
-        public async Task GetAttendanceReportTestFail_400(Trainee trainee, PaginationParameter paginationParameter, int stacode)
+        public async Task GetAttendanceReportTestFail_404(Trainee trainee, PaginationParameter paginationParameter, int stacode)
         {
             //Calling Controller using 2 mock Object
             TraineeController controller = new TraineeController(mockMapper.Object,
@@ -197,7 +197,7 @@ namespace kroniiapiTest.Unit.TraineeControllerTest
             // Get Controller return result
             var actual = await controller.ViewAttendanceReport(trainee.TraineeId, paginationParameter);
             var okResult = actual.Result as ObjectResult;
-            // Assert result with expected result: this time is 400
+            // Assert result with expected result: this time is 404
             Assert.AreEqual(stacode, okResult.StatusCode);
         }
 
