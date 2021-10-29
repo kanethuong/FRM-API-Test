@@ -177,7 +177,7 @@ namespace kroniiapiTest.Intergration.ApplicationControllerTest
                     {
                         Description = "Bao luu",
                         TraineeId = 2,
-                        ApplicationCategoryId = 64
+                        ApplicationCategoryId = 6
                     },
                     "\\FileForTest\\ApplicationTest.docx",
                     400
