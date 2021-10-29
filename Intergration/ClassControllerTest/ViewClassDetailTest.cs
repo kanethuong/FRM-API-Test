@@ -18,7 +18,7 @@ using NUnit.Framework;
 
 namespace kroniiapiTest.Intergration.ClassControllerTest
 {
-    public class GetClassListTest
+    public class ViewClassDetailTest
     {
         private IClassService classService;
         private IAdminService adminService;
@@ -31,7 +31,28 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
         private DataContext dataContext;
         private ClassController classController;
 
-
+        private readonly List<Role> roleList = new List<Role>() {
+            new Role() {
+                RoleId = 1,
+                RoleName = "Administrator"
+            },
+            new Role() {
+                RoleId = 2,
+                RoleName = "Admin"
+            },
+            new Role() {
+                RoleId = 3,
+                RoleName = "Trainer"
+            },
+            new Role() {
+                RoleId = 4,
+                RoleName = "Trainee"
+            },
+            new Role() {
+                RoleId = 5,
+                RoleName = "Company"
+            }
+        };
         List<Class> classList = new List<Class>
         {
             new Class{
@@ -41,7 +62,6 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
                 CreatedAt = new DateTime(2021,10,18),
                 StartDay = new DateTime(2021,10,18),
                 EndDay = new DateTime(2024,10,18),
-                IsDeactivated = false,
                 AdminId = 1,
                 TrainerId =1
             },
@@ -52,11 +72,20 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
                 CreatedAt = new DateTime(2021,10,18),
                 StartDay = new DateTime(2021,10,18),
                 EndDay = new DateTime(2024,10,18),
-                IsDeactivated = false,
                 AdminId = 1,
                 TrainerId = 1
             },
-
+            new Class{
+                ClassId = 3,
+                ClassName = "sdvaszdfvsdfv",
+                Description = "fptunisersdvsdvsity",
+                CreatedAt = new DateTime(2021,10,18),
+                StartDay = new DateTime(2021,10,18),
+                EndDay = new DateTime(2024,10,18),
+                IsDeactivated = true,
+                AdminId = 1,
+                TrainerId = 1
+            },
         };
 
         Admin adminsList = new Admin
@@ -73,7 +102,6 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
             Gender = "Male",
             Wage = 10000,
             CreatedAt = new DateTime(2021, 1, 1),
-            IsDeactivated = true,
             RoleId = 2,
         };
         Trainee traineeList = new Trainee
@@ -90,8 +118,8 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
             Gender = "Male",
             Wage = 10000,
             CreatedAt = new DateTime(2021, 1, 1),
-            IsDeactivated = true,
             RoleId = 4,
+            ClassId = 1
         };
         Trainer trainerList = new Trainer
         {
@@ -107,7 +135,6 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
             Gender = "Male",
             Wage = 10000,
             CreatedAt = new DateTime(2021, 1, 1),
-            IsDeactivated = true,
             RoleId = 3,
         };
         [OneTimeSetUp]
@@ -115,18 +142,28 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
         {
             var option = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase("data").Options;
             dataContext = new DataContext(option);
-            dataContext.Classes.AddRange(classList);
+            dataContext.Roles.AddRange(roleList);
             dataContext.Admins.AddRange(adminsList);
             dataContext.Trainees.AddRange(traineeList);
             dataContext.Trainers.AddRange(trainerList);
+            dataContext.Classes.AddRange(classList);
             dataContext.SaveChanges();
 
             var config = new MapperConfiguration(config =>
             {
                 config.AddProfile(new ClassProfile());
+                config.AddProfile(new ClassDetailProfile());
             });
             mapper = config.CreateMapper();
 
+            traineeService = new TraineeService(
+                dataContext
+            );
+            classService = new ClassService(
+                dataContext,
+                mapper,
+                traineeService
+            );
             trainerService = new TrainerService(
                 dataContext,
                 classService
@@ -135,59 +172,40 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
                 dataContext,
                 classService
             );
-            classService = new ClassService(
-                dataContext,
-                mapper,
-                new TraineeService(dataContext)
-            );
             classController = new ClassController(classService, traineeService, markService, adminService, moduleService, trainerService, feedbackService, mapper);
         }
 
         [OneTimeTearDown]
         public void tearDown()
         {
-            dataContext.Classes.RemoveRange(classList);
+            dataContext.Classes.RemoveRange(dataContext.Classes);
             dataContext.Admins.RemoveRange(dataContext.Admins);
             dataContext.Trainees.RemoveRange(dataContext.Trainees);
             dataContext.Trainers.RemoveRange(dataContext.Trainers);
+            dataContext.Roles.RemoveRange(dataContext.Roles);
             dataContext.SaveChanges();
         }
 
-
-        public static IEnumerable<TestCaseData> GetClassListTestCaseTrue
+        private static IEnumerable<TestCaseData> ViewClassDetailTestData
         {
             get
             {
-                // True case: with PageNumber, PageSize and SearchName
-                yield return new TestCaseData(
-                    new PaginationParameter
-                    {
-                        PageNumber = 1,
-                        PageSize = 1,
-                        SearchName = ""
-                    },
-                    200
-                );
-                //True case: With SearchName
-                yield return new TestCaseData(
-                   new PaginationParameter
-                   {
-                       SearchName = "abcxyz"
-                   },
-                   200
-               );
+                yield return new TestCaseData(1, 200);
+                yield return new TestCaseData(2, 200);
+                yield return new TestCaseData(3, 404);
+                yield return new TestCaseData(4, 404);
+                yield return new TestCaseData(100, 404);
+                yield return new TestCaseData(10, 404);
             }
         }
 
-
         [Test]
-        [TestCaseSource("GetClassListTestCaseTrue")]
-        public async Task GetClassListTest_True(PaginationParameter paginationParameter, int expectedStatus)
+        [TestCaseSource(nameof(ViewClassDetailTestData))]
+        public async Task ViewClassDetail_Result(int id, int statusCode)
         {
-            var rs = await classController.GetClassList(paginationParameter);
-            var obResult = rs.Result as ObjectResult;
-            Assert.AreEqual(expectedStatus, obResult.StatusCode);
+            var actionResult = await classController.ViewClassDetail(id);
+            var result = actionResult.Result as ObjectResult;
+            Assert.AreEqual(statusCode, result.StatusCode);
         }
-
     }
 }
