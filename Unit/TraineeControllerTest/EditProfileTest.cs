@@ -14,6 +14,7 @@ using NUnit.Framework;
 
 namespace kroniiapitest.Unit.TraineeControllerTest
 {
+    [TestFixture]
     public class EditProfileTest
     {
         private IMapper mapper;
