@@ -152,7 +152,6 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
             var config = new MapperConfiguration(config =>
             {
                 config.AddProfile(new ClassProfile());
-                config.AddProfile(new ClassDetailProfile());
             });
             mapper = config.CreateMapper();
 

@@ -12,7 +12,6 @@ using kroniiapi.Controllers;
 using kroniiapi.DTO.AccountDTO;
 using kroniiapi.DB.Models;
 using kroniiapi.DTO.ClassDTO;
-using kroniiapi.DTO.ClassDetailDTO;
 using kroniiapi.Helper.UploadDownloadFile;
 using kroniiapi.Helper.Upload;
 
