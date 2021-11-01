@@ -30,7 +30,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         [Test]
         public async Task ConfirmDelClassReq_Test_Success()
         {
-            classController = new ClassController(mockClass.Object, mockTrainee.Object, mockMark.Object, mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            classController = new ClassController(mockClass.Object, mockTrainee.Object, mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
             mockClass.Setup(cl => cl.UpdateDeletedClass(cfDelClassInput)).ReturnsAsync(1);
             var result = await classController.ConfirmDeleteClassRequest(cfDelClassInput) as ObjectResult;
             var rs = result.Value as ResponseDTO;
@@ -43,7 +43,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         [Test]
         public async Task ConfirmDelClassReq_Test_NotFound()
         {
-            classController = new ClassController(mockClass.Object, mockTrainee.Object, mockMark.Object, mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            classController = new ClassController(mockClass.Object, mockTrainee.Object, mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
             mockClass.Setup(cl => cl.UpdateDeletedClass(cfDelClassInput)).ReturnsAsync(-1);
             var result = await classController.ConfirmDeleteClassRequest(cfDelClassInput) as ObjectResult;
             var rs = result.Value as ResponseDTO;
@@ -56,7 +56,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         [Test]
         public async Task ConfirmDelClassReq_Test_Conflict()
         {
-            classController = new ClassController(mockClass.Object, mockTrainee.Object, mockMark.Object, mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            classController = new ClassController(mockClass.Object, mockTrainee.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
             mockClass.Setup(cl => cl.UpdateDeletedClass(cfDelClassInput)).ReturnsAsync(0);
             var result = await classController.ConfirmDeleteClassRequest(cfDelClassInput) as ObjectResult;
             var rs = result.Value as ResponseDTO;
