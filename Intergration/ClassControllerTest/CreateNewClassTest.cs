@@ -199,7 +199,7 @@ namespace kroniiapitest.Intergration.ClassControllerTest
                         TraineeIdList = new List<int>() { 2 },
                         ModuleIdList = new List<int>() { 1 }
                     },
-                    409
+                    404
                 );
 
                 //Fail case: admin is not exist
@@ -233,7 +233,7 @@ namespace kroniiapitest.Intergration.ClassControllerTest
                         TraineeIdList = new List<int>() { 2 },
                         ModuleIdList = new List<int>() { 1 }
                     },
-                    409
+                    404
                 );
 
                 //Fail case: start day in the past
@@ -301,7 +301,7 @@ namespace kroniiapitest.Intergration.ClassControllerTest
                         TraineeIdList = new List<int>() { 1 },
                         ModuleIdList = new List<int>() { 1 }
                     },
-                    409
+                    404
                 );
 
                 // Fail case: module is not exist
@@ -332,11 +332,10 @@ namespace kroniiapitest.Intergration.ClassControllerTest
             var response = rs.Value as ResponseDTO;
 
             // Assert
-            // Assert.True(
-            //     expStatus == rs.StatusCode &&
-            //     expStatus == response.Status
-            // );
-            Assert.AreEqual(expStatus, rs.StatusCode);
+            Assert.True(
+                expStatus == rs.StatusCode &&
+                expStatus == response.Status
+            );
         }
 
     }
