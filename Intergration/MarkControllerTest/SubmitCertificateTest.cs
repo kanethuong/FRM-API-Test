@@ -170,7 +170,7 @@ namespace kroniiapitest.Intergration.MarkControllerTest
                         ModuleId = 2,
                         TraineeId = 3
                     },
-                    409
+                    400
                 );
             }
         }
@@ -184,14 +184,15 @@ namespace kroniiapitest.Intergration.MarkControllerTest
             string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
             string pathToTest = projectDirectory + pathTest;
             var stream = File.OpenRead(pathToTest);
-            IFormFile file = new FormFile(stream, 0, stream.Length, "SubmitCertificateTest", "SubmitCertificateTest");
+            string[] fileName = pathTest.Split('\\');
+            IFormFile file = new FormFile(stream, 0, stream.Length, "SubmitCertificateTest", fileName[2]);
 
             //Act
             var result = await markController.SubmitCertificate(file, certificateInput) as ObjectResult;
             var response = result.Value as ResponseDTO;
 
             //Assert
-            Assert.AreEqual(expStatus, result.StatusCode);
+            Assert.True(expStatus == result.StatusCode && expStatus == response.Status);
         }
     }
 }
