@@ -35,7 +35,7 @@ namespace kroniiapitest.Unit.ClassControllerTest
         public void SetUp() {
             var config = new MapperConfiguration(config => config.AddProfile(new TraineeProfile()));
             mapper = config.CreateMapper();
-            controller = new ClassController(mockClassService.Object, null, null, null, null, null, null, mapper);
+            controller = new ClassController(mockClassService.Object, null, null, null, null, mapper,null);
         }
 
         [Test]

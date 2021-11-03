@@ -28,6 +28,7 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
         private IFeedbackService feedbackService;
         private IMapper mapper;
         private ITraineeService traineeService;
+        private ITimetableService timetableService;
         private DataContext dataContext;
         private ClassController classController;
 
@@ -172,7 +173,7 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
                 dataContext,
                 classService
             );
-            classController = new ClassController(classService, traineeService, markService, adminService, moduleService, trainerService, feedbackService, mapper);
+            classController = new ClassController(classService, traineeService, adminService, moduleService, trainerService, mapper,timetableService);
         }
 
         [OneTimeTearDown]

@@ -30,7 +30,7 @@ namespace kroniiapitest.Intergration.ClassControllerTest
         private  IMapper mapper;
         private  ITraineeService traineeService;
         private  ClassController classController;
-
+        private ITimetableService timetableService;
 
         private readonly List<Role> roleList = new List<Role>() {
             new Role() {
@@ -190,7 +190,7 @@ namespace kroniiapitest.Intergration.ClassControllerTest
                 dataContext
             );
             classController = new ClassController(classService, 
-                traineeService, markService, adminService, moduleService, trainerService, feedbackService, mapper);
+                traineeService, adminService, moduleService, trainerService, mapper,timetableService);
         }
 
         [OneTimeTearDown]

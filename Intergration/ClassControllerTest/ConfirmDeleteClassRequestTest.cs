@@ -176,7 +176,7 @@ namespace kroniiapiTest.Intergration.ClassControllerTest
             dataContext.Classes.AddRange(classes);
             dataContext.SaveChanges();
             classService = new ClassService(dataContext, mapper, traineeService);
-            classController = new ClassController(classService, null, null, null, null, null, null, null);
+            classController = new ClassController(classService, null, null, null, null, null,null);
 
         }
 

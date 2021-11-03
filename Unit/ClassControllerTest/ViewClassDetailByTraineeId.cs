@@ -47,7 +47,7 @@ namespace kroniiapitest.Unit.ClassControllerTest
         [TestCaseSource("ViewClassDetailByTraineeIdTestCaseTrue")]
         public async Task ViewClassDetailByTraineeIdTrue_ActionResult_Status200(int traineeId, int result)
         {
-            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object ,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
 
             mockTrainee.Setup(x => x.GetClassIdByTraineeId(traineeId)).ReturnsAsync((1, ""));
 
@@ -74,7 +74,7 @@ namespace kroniiapitest.Unit.ClassControllerTest
         [TestCaseSource("ViewClassDetailByTraineeIdTestCaseFalse")]
         public async Task ViewClassDetailByTraineeIdTrue_ActionResult_Status404(int traineeId, int result)
         {
-            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
 
             mockTrainee.Setup(x => x.GetClassIdByTraineeId(traineeId)).ReturnsAsync((-1, ""));
 
@@ -104,7 +104,7 @@ namespace kroniiapitest.Unit.ClassControllerTest
         [TestCaseSource("ViewClassDetailByTraineeIdTestCaseFalseNull")]
         public async Task ViewClassDetailByTraineeIdTrue_ActionResult_Status404_nullObject(int traineeId, int result)
         {
-            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
 
             mockTrainee.Setup(x => x.GetClassIdByTraineeId(traineeId)).ReturnsAsync((1, ""));
 

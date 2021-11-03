@@ -87,7 +87,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         public async Task GetDeleteClassRequestList_ActionResult_200(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
-            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
 
             // Setup Services return using Mock
             mockClass.Setup(x => x.GetRequestDeleteClassList(paginationParameter)).ReturnsAsync(Tuple.Create(1,deleteClassRequestsListTrue));
@@ -140,7 +140,7 @@ namespace kroniiapiTest.Unit.ClassControllerTest
         public async Task GetDeleteClassRequestList_ActionResult_404(PaginationParameter paginationParameter,int stacode)
         {
             //Calling Controller using 2 mock Object
-            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockMark.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockFeedback.Object, mockMapper.Object);
+            ClassController controller = new ClassController(mockClass.Object,mockTrainee.Object,mockAdmin.Object, mockModule.Object, mockTrainer.Object, mockMapper.Object,null);
 
             // Setup Services return using Mock
             mockClass.Setup(x => x.GetRequestDeleteClassList(paginationParameter)).ReturnsAsync(Tuple.Create(0,deleteClassRequestsListFail));
